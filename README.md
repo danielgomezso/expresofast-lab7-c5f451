@@ -1,4 +1,6 @@
-# Laboratorio 6: Plataforma Full-Stack de Logística "ExpresoFast" (Parte II)
+# Laboratorio 7: Pruebas y cobertura de ExpresoFast
+
+Continuación de la misma aplicación de los laboratorios 5 y 6.
 
 ## 1. Portada
 * **Universidad:** Universidad de Costa Rica
@@ -40,18 +42,70 @@ A continuación se detallan las credenciales preconfiguradas para probar el cont
 | conductor1 | cond123 | `ROLE_CONDUCTOR` |
 
 > **Nota:** Las contraseñas en la base de datos se encuentran encriptadas. Estas son las credenciales en texto plano para el inicio de sesión.
-cd "d:\temporada 4\Software 4\DSW4_workspace\Laboratorio_6"
-
-git init
-git branch -M main
-git remote add origin https://github.com/danielgomezso/expresofast-lab6-c5f451.git
 ---
 
 ## 5. Instrucciones de Ejecución
 
 ### Levantar el Backend (Spring Boot)
 1. Abrir una terminal en la carpeta raíz del backend: `cd expresofast`
-2. Verificar que el archivo `application.properties` tenga las credenciales correctas de tu base de datos SQL Server.
+2. Configurar `DB_URL`, `DB_USERNAME` y `DB_PASSWORD` como variables de entorno,
+   o crear `expresofast/application-local.properties` con `spring.datasource.url`,
+   `spring.datasource.username` y `spring.datasource.password`. Este archivo local
+   está excluido de Git. En este equipo se conservaron allí los valores existentes.
 3. Ejecutar el proyecto con Maven:
    ```bash
    mvn spring-boot:run
+   ```
+
+### Abrir el frontend
+
+Servir `frontend/` con Live Server en el puerto 5500 y abrir `login.html`.
+
+## 6. Ejecutar las pruebas del laboratorio 7
+
+Usar **JDK 21**: JaCoCo 0.8.11, solicitado por el enunciado, no debe ejecutarse con
+Java 24. En PowerShell, para esta instalación:
+
+```powershell
+$env:JAVA_HOME = 'C:\Program Files\Java\jdk-21'
+cd expresofast
+mvn clean test
+mvn clean verify
+```
+
+También se puede utilizar `./mvnw.cmd clean verify` desde `expresofast/`.
+En otros equipos, ajustar `JAVA_HOME` a su instalación de Java 21.
+
+- `clean test`: ejecuta JUnit 5 y genera `expresofast/target/site/jacoco/index.html`.
+- `clean verify`: además empaqueta y exige al menos **85 % de instrucciones cubiertas**.
+- Surefire **3.2.5** y JaCoCo **0.8.11** están declarados en `expresofast/pom.xml`.
+- La regla mide `cr.ac.ucr.paraiso.ie.c5f451.expresofast.business`, el paquete real
+  de servicios de esta aplicación, equivalente al `com.expresofast.service` del ejemplo.
+  Incluye los cuatro servicios, sin exclusiones de clases.
+
+Las pruebas unitarias usan `@ExtendWith(MockitoExtension.class)`, `@Mock` y
+`@InjectMocks`. Los cortes web usan `@WebMvcTest`, MockMvc y la configuración real
+de permisos; `@WithMockUser` simula la identidad. No se desactivan los filtros para
+la prueba de HTTP 403.
+
+El test de arranque existente se conserva y utiliza H2 **solo en pruebas** mediante
+`src/test/resources/application.properties`. Las pruebas no requieren SQL Server
+ni utilizan sus credenciales. H2 comprueba el arranque y los mapeos; no certifica
+la compatibilidad del script de migración con SQL Server.
+
+| Clase | Casos principales |
+| --- | --- |
+| `EnvioServiceTest` | Creación PENDIENTE, capacidad excedida y exacta, referencias inválidas, consulta por ID, transiciones, cancelación, bitácora y tarifas parametrizadas |
+| `VehiculoServiceTest` | Registro válido, placa duplicada, capacidad inválida y asignación de conductor activo/inactivo/inexistente |
+| `EmpresaLogisticaServiceTest` | Registro, duplicados por nombre/cédula, datos inválidos, consulta existente/inexistente y listado |
+| `AuthServiceTest` | Autenticación, generación del token, roles y rechazo de credenciales |
+| `EnvioControllerTest` | HTTP 200, 201, 400, 403 y 404; contrato JSON y errores RFC 7807 |
+| `AuthControllerTest` | Login HTTP 200 con token y HTTP 401 por credenciales incorrectas |
+
+## 7. Base de datos y entrega
+
+Para ejecutar la aplicación contra SQL Server con los campos nuevos, aplicar
+`database/04_schema_lab7_extension.sql` después de los scripts 01 a 03. Agrega
+`Conductor.activo` (verdadero por defecto) y `Vehiculo.conductor_id` (opcional),
+sin borrar datos. **Este script no se ha ejecutado contra la base de datos remota.**
+No hace falta aplicarlo para ejecutar las pruebas.
