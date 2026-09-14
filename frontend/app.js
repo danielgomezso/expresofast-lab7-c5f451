@@ -137,7 +137,7 @@ async function actualizarEstado(idEnvio, nuevoEstado) {
             cargarEnvios();
         } else {
             const error = await respuesta.json();
-            alert(`Error: ${error.mensaje || 'Transición inválida'}`);
+            alert(`Error: ${error.detail || error.mensaje || 'Transición inválida'}`);
         }
     } catch (error) {
         console.error("Error al actualizar:", error);

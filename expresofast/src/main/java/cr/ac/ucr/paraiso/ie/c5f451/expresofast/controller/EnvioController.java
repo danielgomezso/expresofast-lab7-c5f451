@@ -23,6 +23,11 @@ public class EnvioController {
         this.envioService = envioService;
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<EnvioResponseDTO> obtenerEnvio(@PathVariable Integer id) {
+        return ResponseEntity.ok(envioService.obtenerEnvioPorId(id));
+    }
+
     @GetMapping("/optimizados")
     public ResponseEntity<List<Envio>> obtenerEnviosOptimizados() {
         List<Envio> envios = envioService.obtenerEnviosOptimizados();
