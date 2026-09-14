@@ -8,6 +8,12 @@ import java.util.List;
 @Entity
 @Table(name = "Vehiculo")
 public class Vehiculo {
+    @ManyToOne
+    @JoinColumn(name = "conductor_id")
+    private Conductor conductor;
+    public Conductor getConductor() { return conductor; }
+    public void setConductor(Conductor conductor) { this.conductor = conductor; }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

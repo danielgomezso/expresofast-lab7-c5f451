@@ -7,6 +7,11 @@ import java.util.List;
 @Entity
 @Table(name = "Conductor")
 public class Conductor {
+    @Column(nullable = false)
+    private boolean activo = true;
+    public boolean isActivo() { return activo; }
+    public void setActivo(boolean activo) { this.activo = activo; }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

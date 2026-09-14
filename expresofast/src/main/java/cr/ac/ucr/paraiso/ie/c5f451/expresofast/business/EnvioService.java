@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import cr.ac.ucr.paraiso.ie.c5f451.expresofast.exception.*;
 import java.util.List;
 
 @Service
@@ -37,6 +38,49 @@ public class EnvioService {
         this.vehiculoRepository = vehiculoRepository;
         this.bitacoraEnvioRepository = bitacoraEnvioRepository;
         this.usuarioRepository = usuarioRepository;
+    }
+
+    @Transactional(readOnly = true)
+    public EnvioResponseDTO obtenerEnvioPorId(Integer id) {
+        return toDTO(
+                envioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El envío no existe.")));
+    }
+
+    @Transactional
+    public EnvioResponseDTO crearEnvio(Envio envio) {
+        return toDTO(registrarEnvio(envio));
+    }
+
+    @Transactional
+    public EnvioResponseDTO cancelarEnvio(Integer id) {
+        CambioEstadoDTO dto = new CambioEstadoDTO();
+        dto.setNuevoEstado("CANCELADO");
+        return actualizarEstadoEnvio(id, dto);
+    }
+
+    // Regla provisional: mayor entre componente de peso y componente de distancia.
+    public double calcularTarifa(double pesoKg, double distanciaKm) {
+        if (!Double.isFinite(pesoKg) || !Double.isFinite(distanciaKm) || pesoKg <= 0 || distanciaKm <= 0)
+            throw new IllegalArgumentException("Peso y distancia deben ser positivos y finitos.");
+        double tarifa = Math.max(2000.0 + 100.0 * pesoKg, 150.0 * distanciaKm);
+        if (!Double.isFinite(tarifa))
+            throw new IllegalArgumentException("Tarifa fuera de rango.");
+        return tarifa;
+    }
+
+    private EnvioResponseDTO toDTO(Envio envio) {
+        EnvioResponseDTO dto = new EnvioResponseDTO();
+        dto.setId(envio.getId());
+        dto.setCodigoRastreo(envio.getCodigoRastreo());
+        dto.setDireccionDestino(envio.getDireccionDestino());
+        dto.setPesoKg(envio.getPesoKg());
+        dto.setCosto(envio.getCosto());
+        dto.setEstadoEnvio(envio.getEstadoEnvio());
+        if (envio.getVehiculo() != null)
+            dto.setPlacaVehiculo(envio.getVehiculo().getPlaca());
+        if (envio.getConductor() != null)
+            dto.setNombreConductor(envio.getConductor().getNombre());
+        return dto;
     }
 
     @Transactional(readOnly = true)
@@ -61,25 +105,30 @@ public class EnvioService {
         Vehiculo vehiculo = vehiculoRepository.findById(envio.getVehiculo().getId())
                 .orElseThrow(() -> new IllegalArgumentException("El vehículo especificado no existe."));
 
+        if (envio.getPesoKg() == null || envio.getPesoKg().signum() <= 0)
+            throw new IllegalArgumentException("El peso debe ser positivo.");
         if (envio.getPesoKg().compareTo(vehiculo.getCapacidadKg()) > 0) {
-            throw new IllegalArgumentException("Error: El peso del envío (" + envio.getPesoKg() +
+            throw new CapacidadExcedidaException("Error: El peso del envío (" + envio.getPesoKg() +
                     " kg) supera la capacidad máxima del vehículo asignado (" +
                     vehiculo.getCapacidadKg() + " kg).");
         }
 
+        envio.setEstadoEnvio("PENDIENTE");
         return envioRepository.save(envio);
     }
 
     @Transactional
     public EnvioResponseDTO actualizarEstadoEnvio(Integer id, CambioEstadoDTO dto) {
         Envio envio = envioRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("El envío no existe."));
+                .orElseThrow(() -> new ResourceNotFoundException("El envío no existe."));
 
         String estadoAnterior = envio.getEstadoEnvio();
         String estadoNuevo = dto.getNuevoEstado();
 
-        if ((estadoAnterior.equals("ENTREGADO") || estadoAnterior.equals("CANCELADO")) &&
-                (estadoNuevo.equals("PENDIENTE") || estadoNuevo.equals("EN_TRANSITO"))) {
+        boolean permitida = ("PENDIENTE".equals(estadoAnterior) &&
+                ("EN_TRANSITO".equals(estadoNuevo) || "CANCELADO".equals(estadoNuevo))) ||
+                ("EN_TRANSITO".equals(estadoAnterior) && "ENTREGADO".equals(estadoNuevo));
+        if (!permitida) {
             throw new cr.ac.ucr.paraiso.ie.c5f451.expresofast.exception.InvalidStateTransitionException(
                     "Transición de estado no permitida para el envío " + envio.getCodigoRastreo());
         }

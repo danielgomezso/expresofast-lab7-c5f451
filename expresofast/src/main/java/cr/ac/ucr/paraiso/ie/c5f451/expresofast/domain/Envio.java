@@ -1,6 +1,7 @@
 package cr.ac.ucr.paraiso.ie.c5f451.expresofast.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -13,15 +14,19 @@ public class Envio extends AuditableEntity {
     private Integer id;
 
     @Column(name = "codigo_rastreo", nullable = false, unique = true, length = 30)
+    @NotBlank
     private String codigoRastreo;
 
     @Column(name = "direccion_destino", nullable = false, length = 200)
+    @NotBlank
     private String direccionDestino;
 
     @Column(name = "peso_kg", nullable = false, precision = 10, scale = 2)
+    @NotNull @Positive
     private BigDecimal pesoKg;
 
     @Column(nullable = false, precision = 10, scale = 2)
+    @NotNull @Positive
     private BigDecimal costo;
 
     @Column(name = "estado_envio", nullable = false, length = 20)
@@ -29,10 +34,12 @@ public class Envio extends AuditableEntity {
 
     @ManyToOne
     @JoinColumn(name = "vehiculo_id", nullable = false)
+    @NotNull
     private Vehiculo vehiculo;
 
     @ManyToOne
     @JoinColumn(name = "conductor_id", nullable = false)
+    @NotNull
     private Conductor conductor;
 
     public Integer getId() {
