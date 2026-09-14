@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ExpresoFast</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+
+    <form id="loginForm" style="flex-direction: column; width: 300px;">
+        <h2 style="text-align: center; margin-top: 0;">Iniciar Sesión</h2>
+        <input type="text" id="username" placeholder="Usuario" required>
+        <input type="password" id="password" placeholder="Contraseña" required>
+        <button type="submit">Ingresar</button>
+    </form>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const payload = {
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value
+            };
+
+            const respuesta = await fetch('http://localhost:8080/api/auth/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            });
+
+            if (respuesta.ok) {
+                const data = await respuesta.json();
+                localStorage.setItem('jwt_token', data.token);
+                localStorage.setItem('roles', JSON.stringify(data.roles));
+                window.location.href = 'index.html';
+            } else {
+                alert('Credenciales inválidas');
+            }
+        });
+    </script>
+</body>
+
+</html>

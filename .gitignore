@@ -1,0 +1,6 @@
+# Configuración privada y archivos auxiliares locales
+.local/
+**/application-local.properties
+**/target/
+*.log
+.github/modernize/
