@@ -5,6 +5,8 @@ import cr.ac.ucr.paraiso.ie.c5f451.expresofast.domain.EmpresaLogistica;
 import cr.ac.ucr.paraiso.ie.c5f451.expresofast.exception.*;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +31,7 @@ public class EmpresaLogisticaService {
     }
 
     @Transactional(readOnly = true)
-    public EmpresaLogistica obtenerEmpresa(Integer id) {
+    public EmpresaLogistica obtenerEmpresa(@NonNull Integer id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Empresa no encontrada."));
     }
 

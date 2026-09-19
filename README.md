@@ -102,10 +102,6 @@ la compatibilidad del script de migración con SQL Server.
 | `EnvioControllerTest` | HTTP 200, 201, 400, 403 y 404; contrato JSON y errores RFC 7807 |
 | `AuthControllerTest` | Login HTTP 200 con token y HTTP 401 por credenciales incorrectas |
 
-## 7. Base de datos y entrega
+## 7. Base de datos
 
-Para ejecutar la aplicación contra SQL Server con los campos nuevos, aplicar
-`database/04_schema_lab7_extension.sql` después de los scripts 01 a 03. Agrega
-`Conductor.activo` (verdadero por defecto) y `Vehiculo.conductor_id` (opcional),
-sin borrar datos. **Este script no se ha ejecutado contra la base de datos remota.**
-No hace falta aplicarlo para ejecutar las pruebas.
+Debe aplicar todos los scripts 01 a 04 en orden.

@@ -8,6 +8,7 @@ import cr.ac.ucr.paraiso.ie.c5f451.expresofast.dto.EnvioResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class EnvioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EnvioResponseDTO> obtenerEnvio(@PathVariable Integer id) {
+    public ResponseEntity<EnvioResponseDTO> obtenerEnvio(@PathVariable @NonNull Integer id) {
         return ResponseEntity.ok(envioService.obtenerEnvioPorId(id));
     }
 

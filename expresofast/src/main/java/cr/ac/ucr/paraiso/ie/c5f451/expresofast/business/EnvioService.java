@@ -12,6 +12,7 @@ import cr.ac.ucr.paraiso.ie.c5f451.expresofast.dto.BitacoraResponseDTO;
 import cr.ac.ucr.paraiso.ie.c5f451.expresofast.dto.CambioEstadoDTO;
 import cr.ac.ucr.paraiso.ie.c5f451.expresofast.dto.EnvioResponseDTO;
 
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class EnvioService {
     }
 
     @Transactional(readOnly = true)
-    public EnvioResponseDTO obtenerEnvioPorId(Integer id) {
+    public EnvioResponseDTO obtenerEnvioPorId(@NonNull Integer id) {
         return toDTO(
                 envioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El envío no existe.")));
     }

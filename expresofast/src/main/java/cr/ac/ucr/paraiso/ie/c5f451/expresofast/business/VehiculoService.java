@@ -3,6 +3,8 @@ package cr.ac.ucr.paraiso.ie.c5f451.expresofast.business;
 import cr.ac.ucr.paraiso.ie.c5f451.expresofast.data.*;
 import cr.ac.ucr.paraiso.ie.c5f451.expresofast.domain.*;
 import cr.ac.ucr.paraiso.ie.c5f451.expresofast.exception.*;
+
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +30,7 @@ public class VehiculoService {
     }
 
     @Transactional
-    public Vehiculo asignarConductor(Integer vehiculoId, Integer conductorId) {
+    public Vehiculo asignarConductor(@NonNull Integer vehiculoId, @NonNull Integer conductorId) {
         Vehiculo vehiculo = vehiculos.findById(vehiculoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Vehículo no encontrado."));
         Conductor conductor = conductores.findById(conductorId)
