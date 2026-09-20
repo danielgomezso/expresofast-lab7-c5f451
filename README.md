@@ -47,9 +47,9 @@ A continuación se detallan las credenciales preconfiguradas para probar el cont
 ## 5. Instrucciones de Ejecución
 
 ### Levantar el Backend (Spring Boot)
-1. Abrir una terminal en la carpeta raíz del backend: `cd expresofast`
+1. Abrir una terminal en la carpeta raíz del backend: `cd backend`
 2. Configurar `DB_URL`, `DB_USERNAME` y `DB_PASSWORD` como variables de entorno,
-   o crear `expresofast/application-local.properties` con `spring.datasource.url`,
+   o crear `backend/application-local.properties` con `spring.datasource.url`,
    `spring.datasource.username` y `spring.datasource.password`. Este archivo local
    está excluido de Git. En este equipo se conservaron allí los valores existentes.
 3. Ejecutar el proyecto con Maven:
@@ -59,7 +59,7 @@ A continuación se detallan las credenciales preconfiguradas para probar el cont
 
 ### Abrir el frontend
 
-Servir `frontend/` con Live Server en el puerto 5500 y abrir `login.html`.
+Servir `frontend/` con Live Server en el puerto 5500 y abrir `index.html`.
 
 ## 6. Ejecutar las pruebas del laboratorio 7
 
@@ -68,17 +68,17 @@ Java 24. En PowerShell, para esta instalación:
 
 ```powershell
 $env:JAVA_HOME = 'C:\Program Files\Java\jdk-21'
-cd expresofast
+cd backend
 mvn clean test
 mvn clean verify
 ```
 
-También se puede utilizar `./mvnw.cmd clean verify` desde `expresofast/`.
+También se puede utilizar `./mvnw.cmd clean verify` desde `backend/`.
 En otros equipos, ajustar `JAVA_HOME` a su instalación de Java 21.
 
-- `clean test`: ejecuta JUnit 5 y genera `expresofast/target/site/jacoco/index.html`.
+- `clean test`: ejecuta JUnit 5 y genera `backend/target/site/jacoco/index.html`.
 - `clean verify`: además empaqueta y exige al menos **85 % de instrucciones cubiertas**.
-- Surefire **3.2.5** y JaCoCo **0.8.11** están declarados en `expresofast/pom.xml`.
+- Surefire **3.2.5** y JaCoCo **0.8.11** están declarados en `backend/pom.xml`.
 - La regla mide `cr.ac.ucr.paraiso.ie.c5f451.expresofast.business`, el paquete real
   de servicios de esta aplicación, equivalente al `com.expresofast.service` del ejemplo.
   Incluye los cuatro servicios, sin exclusiones de clases.

@@ -4,102 +4,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ExpresoFast</title>
+    <title>Login - ExpresoFast</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
-<body>
+<body class="pagina-login">
 
-    <header>
-        <h1>ExpresoFast</h1>
-        <div class="usuario-info">
-            <span id="usuarioActual"></span>
-            <button onclick="logout()">Salir</button>
-        </div>
-    </header>
+    <form id="loginForm" class="form-login">
+        <h2>Iniciar Sesión</h2>
+        <div id="loginError" class="alerta-error" aria-live="polite"></div>
 
-    <nav>
-        <button onclick="filtrarEnvios('TODOS')">Todos</button>
-        <button onclick="filtrarEnvios('PENDIENTE')">Pendientes</button>
-        <button onclick="filtrarEnvios('EN_TRANSITO')">En Tránsito</button>
-        <button onclick="filtrarEnvios('ENTREGADO')">Entregados</button>
-    </nav>
+        <label for="username">Usuario</label>
+        <input type="text" id="username" name="username" required>
 
-    <div class="contenedor-app">
-        <main>
-            <section id="kpiSection" class="kpi-grid">
-                <article class="kpi-card">
-                    <h3>Total Envíos</h3>
-                    <p id="kpiTotal">0</p>
-                </article>
-                <article class="kpi-card">
-                    <h3>Vehículos Activos</h3>
-                    <p id="kpiVehiculos">0</p>
-                </article>
-                <article class="kpi-card">
-                    <h3>Paquetes Entregados</h3>
-                    <p id="kpiEntregados">0</p>
-                </article>
-            </section>
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" required>
 
-            <div id="alertaErrores" class="alerta-error" aria-live="polite"></div>
+        <button type="submit">Ingresar</button>
+    </form>
 
-            <section id="seccionRegistro">
-                <h2>Registrar Envío</h2>
-                <form id="formEnvio">
-                    <input type="text" id="codigoRastreo" placeholder="Código de rastreo" required>
-                    <input type="text" id="direccionDestino" placeholder="Dirección" required>
-                    <input type="number" id="pesoKg" placeholder="Peso (kg)" step="0.01" required>
-                    <input type="number" id="costo" placeholder="Costo total" step="0.01" required>
-                    <input type="number" id="vehiculoId" placeholder="ID del Vehículo" required>
-                    <input type="number" id="conductorId" placeholder="ID del Conductor" required>
-                    <button type="submit">Guardar</button>
-                </form>
-            </section>
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
 
-            <section id="enviosGrid"></section>
-        </main>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const errorBox = document.getElementById('loginError');
+            errorBox.textContent = '';
 
-        <aside id="panelAdmin">
-            <h2>Registrar Vehículo</h2>
-            <form id="formVehiculo">
-                <input type="text" id="placaVehiculo" placeholder="Placa" required>
-                <input type="number" id="capacidadVehiculo" placeholder="Capacidad (kg)" step="0.01" required>
-                <input type="number" id="empresaVehiculo" placeholder="ID de Empresa" required>
-                <button type="submit">Registrar</button>
-            </form>
-        </aside>
-    </div>
+            const payload = {
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value
+            };
 
-    <div id="modalBitacora" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="cerrarModal()">&times;</span>
-            <h2>Bitácora de Auditoría</h2>
-            <div class="filtro-fechas">
-                <input type="date" id="fechaInicio">
-                <input type="date" id="fechaFin">
-                <button onclick="filtrarBitacora()">Filtrar</button>
-            </div>
-            <table width="100%" border="1">
-                <thead>
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Usuario</th>
-                        <th>Anterior</th>
-                        <th>Nuevo</th>
-                    </tr>
-                </thead>
-                <tbody id="bodyBitacora"></tbody>
-            </table>
-        </div>
-    </div>
+            try {
+                const respuesta = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
 
-    <footer>
-        <p>&copy; 2026 ExpresoFast. Todos los derechos reservados.</p>
-        <a href="#">Soporte</a>
-    </footer>
-
-    <script src="app.js"></script>
+                if (respuesta.ok) {
+                    const data = await respuesta.json();
+                    sessionStorage.setItem('jwt_token', data.token);
+                    sessionStorage.setItem('roles', JSON.stringify(data.roles));
+                    sessionStorage.setItem('username', data.username);
+                    window.location.href = 'index.html';
+                } else {
+                    const problema = await respuesta.json();
+                    errorBox.textContent = problema.detail || 'Credenciales inválidas';
+                }
+            } catch (error) {
+                errorBox.textContent = 'No se pudo conectar con el servidor';
+            }
+        });
+    </script>
 </body>
 
 </html>

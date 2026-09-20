@@ -5,7 +5,7 @@ let bitacoraActual = [];
 document.addEventListener('DOMContentLoaded', () => {
     const token = sessionStorage.getItem('jwt_token');
     if (!token) {
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
         return;
     }
 
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function logout() {
     sessionStorage.clear();
-    window.location.href = 'login.html';
+    window.location.href = 'index.html';
 }
 
 function mostrarErrores(problema) {
