@@ -1,6 +1,6 @@
-# Laboratorio 7: Pruebas y cobertura de ExpresoFast
+# Laboratorio 8: Pruebas y cobertura de ExpresoFast
 
-Continuación de la misma aplicación de los laboratorios 5 y 6.
+Continuación de la misma aplicación de los laboratorios 5,6,7
 
 ## 1. Portada
 * **Universidad:** Universidad de Costa Rica
