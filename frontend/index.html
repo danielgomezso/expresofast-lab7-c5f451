@@ -1,59 +1,86 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ExpresoFast</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
     <header>
         <h1>ExpresoFast</h1>
-        <nav>
-            <ul>
-                <li><a href="#">Inicio</a></li>
-                <li><a href="#">Monitoreo</a></li>
-                <li><button onclick="logout()" style="background: none; border: none; color: white; cursor: pointer;">Salir</button></li>
-            </ul>
-        </nav>
+        <div class="usuario-info">
+            <span id="usuarioActual"></span>
+            <button onclick="logout()">Salir</button>
+        </div>
     </header>
 
-    <main>
-        <aside>
-            <h2>Filtros</h2>
-            <button onclick="filtrarEnvios('TODOS')">Todos</button>
-            <button onclick="filtrarEnvios('PENDIENTE')">Pendientes</button>
-            <button onclick="filtrarEnvios('EN_TRANSITO')">En Tránsito</button>
-            <button onclick="filtrarEnvios('ENTREGADO')">Entregados</button>
-        </aside>
+    <nav>
+        <button onclick="filtrarEnvios('TODOS')">Todos</button>
+        <button onclick="filtrarEnvios('PENDIENTE')">Pendientes</button>
+        <button onclick="filtrarEnvios('EN_TRANSITO')">En Tránsito</button>
+        <button onclick="filtrarEnvios('ENTREGADO')">Entregados</button>
+    </nav>
 
-        <section id="seccionRegistro">
-            <h2>Registrar Envío</h2>
-            <form id="formEnvio">
-                <input type="text" id="codigoRastreo" placeholder="Código de rastreo" required>
-                <input type="text" id="direccionDestino" placeholder="Dirección" required>
-                <input type="number" id="pesoKg" placeholder="Peso (kg)" step="0.01" required>
-                <input type="number" id="costo" placeholder="Costo total" step="0.01" required>
-                <input type="number" id="vehiculoId" placeholder="ID del Vehículo" required>
-                <input type="number" id="conductorId" placeholder="ID del Conductor" required>
-                <button type="submit">Guardar</button>
+    <div class="contenedor-app">
+        <main>
+            <section id="kpiSection" class="kpi-grid">
+                <article class="kpi-card">
+                    <h3>Total Envíos</h3>
+                    <p id="kpiTotal">0</p>
+                </article>
+                <article class="kpi-card">
+                    <h3>Vehículos Activos</h3>
+                    <p id="kpiVehiculos">0</p>
+                </article>
+                <article class="kpi-card">
+                    <h3>Paquetes Entregados</h3>
+                    <p id="kpiEntregados">0</p>
+                </article>
+            </section>
+
+            <div id="alertaErrores" class="alerta-error" aria-live="polite"></div>
+
+            <section id="seccionRegistro">
+                <h2>Registrar Envío</h2>
+                <form id="formEnvio">
+                    <input type="text" id="codigoRastreo" placeholder="Código de rastreo" required>
+                    <input type="text" id="direccionDestino" placeholder="Dirección" required>
+                    <input type="number" id="pesoKg" placeholder="Peso (kg)" step="0.01" required>
+                    <input type="number" id="costo" placeholder="Costo total" step="0.01" required>
+                    <input type="number" id="vehiculoId" placeholder="ID del Vehículo" required>
+                    <input type="number" id="conductorId" placeholder="ID del Conductor" required>
+                    <button type="submit">Guardar</button>
+                </form>
+            </section>
+
+            <section id="enviosGrid"></section>
+        </main>
+
+        <aside id="panelAdmin">
+            <h2>Registrar Vehículo</h2>
+            <form id="formVehiculo">
+                <input type="text" id="placaVehiculo" placeholder="Placa" required>
+                <input type="number" id="capacidadVehiculo" placeholder="Capacidad (kg)" step="0.01" required>
+                <input type="number" id="empresaVehiculo" placeholder="ID de Empresa" required>
+                <button type="submit">Registrar</button>
             </form>
-        </section>
-
-        <section id="contenedorEnvios"></section>
-    </main>
+        </aside>
+    </div>
 
     <div id="modalBitacora" class="modal">
         <div class="modal-content">
             <span class="close" onclick="cerrarModal()">&times;</span>
             <h2>Bitácora de Auditoría</h2>
-            <div style="margin-bottom: 1rem; display: flex; gap: 10px;">
+            <div class="filtro-fechas">
                 <input type="date" id="fechaInicio">
                 <input type="date" id="fechaFin">
-                <button onclick="filtrarBitacora()" style="padding: 0.5rem;">Filtrar</button>
+                <button onclick="filtrarBitacora()">Filtrar</button>
             </div>
-            <table width="100%" border="1" style="border-collapse: collapse;">
+            <table width="100%" border="1">
                 <thead>
                     <tr>
                         <th>Fecha</th>
@@ -67,6 +94,12 @@
         </div>
     </div>
 
+    <footer>
+        <p>&copy; 2026 ExpresoFast. Todos los derechos reservados.</p>
+        <a href="#">Soporte</a>
+    </footer>
+
     <script src="app.js"></script>
 </body>
+
 </html>
