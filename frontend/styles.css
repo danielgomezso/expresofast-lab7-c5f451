@@ -22,41 +22,78 @@ header {
     padding: 1rem 2rem;
 }
 
-header ul {
+.usuario-info {
     display: flex;
-    gap: 1.5rem;
-    list-style: none;
+    align-items: center;
+    gap: 1rem;
 }
 
-header a {
+.usuario-info button {
+    background: none;
+    border: 1px solid white;
     color: white;
-    text-decoration: none;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
 }
 
-main {
+nav {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    background: white;
+    flex-wrap: wrap;
+}
+
+nav button {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.contenedor-app {
     display: flex;
     gap: 2rem;
     padding: 2rem;
 }
 
+main {
+    flex-grow: 1;
+    min-width: 0;
+}
+
 aside {
-    width: 200px;
+    width: 260px;
+    flex-shrink: 0;
     background: white;
     padding: 1rem;
     border-radius: 8px;
     height: fit-content;
 }
 
-aside button {
-    display: block;
-    width: 100%;
-    margin-bottom: 0.5rem;
-    padding: 0.5rem;
-    cursor: pointer;
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
 }
 
-section {
-    flex-grow: 1;
+.kpi-card {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.kpi-card p {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 0.3rem 0 0;
+    color: var(--color-primario);
+}
+
+.alerta-error {
+    color: var(--color-cancelado);
+    margin-bottom: 1rem;
 }
 
 form {
@@ -82,7 +119,11 @@ form button {
     cursor: pointer;
 }
 
-#contenedorEnvios {
+#panelAdmin form {
+    flex-direction: column;
+}
+
+#enviosGrid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
@@ -140,9 +181,58 @@ article {
     max-width: 600px;
 }
 
+.filtro-fechas {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
 .close {
     float: right;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+}
+
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    color: var(--color-primario);
+}
+
+.pagina-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.form-login {
+    flex-direction: column;
+    width: 300px;
+}
+
+.form-login label {
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .contenedor-app {
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    aside {
+        width: 100%;
+    }
+
+    nav {
+        flex-direction: column;
+    }
+
+    header {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
 }
