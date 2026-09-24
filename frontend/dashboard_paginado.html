@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Envíos paginados - ExpresoFast</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="paginacion.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>ExpresoFast</h1>
+        <div class="usuario-info">
+            <span id="usuarioActual"></span>
+            <button id="salir" type="button">Salir</button>
+        </div>
+    </header>
+    <nav aria-label="Secciones">
+        <a href="dashboard.html">Gestión de envíos</a>
+        <a href="dashboard_paginado.html" aria-current="page">Consulta paginada</a>
+    </nav>
+    <main class="consola-paginada">
+        <h2>Consulta de envíos</h2>
+        <form id="filtros">
+            <label>Buscar
+                <input id="busqueda" type="search" placeholder="Rastreo, destinatario o dirección">
+            </label>
+            <label>Estado
+                <select id="estado">
+                    <option value="">Todos</option>
+                    <option>PENDIENTE</option>
+                    <option>EN_TRANSITO</option>
+                    <option>ENTREGADO</option>
+                    <option>CANCELADO</option>
+                </select>
+            </label>
+            <label>Envíos por página
+                <select id="size"><option>5</option><option>10</option><option>20</option></select>
+            </label>
+            <label>Ordenar por
+                <select id="sortBy">
+                    <option value="fechaCreacion">Fecha de creación</option>
+                    <option value="codigoRastreo">Rastreo</option>
+                    <option value="destinatario">Destinatario</option>
+                    <option value="montoFlete">Flete</option>
+                    <option value="estado">Estado</option>
+                </select>
+            </label>
+            <label>Dirección del orden
+                <select id="direction"><option value="DESC">Descendente</option><option value="ASC">Ascendente</option></select>
+            </label>
+            <label>Procedimiento almacenado
+                <select id="procedimiento">
+                    <option value="">Consulta paginada</option>
+                    <option value="PENDIENTE">SP: pendientes</option>
+                    <option value="EN_TRANSITO">SP: en tránsito</option>
+                    <option value="ENTREGADO">SP: entregados</option>
+                    <option value="CANCELADO">SP: cancelados</option>
+                </select>
+            </label>
+            <button type="submit">Consultar</button>
+        </form>
+        <p id="error" class="alerta-error" role="alert"></p>
+        <div class="tabla-contenedor">
+            <table class="tabla-envios">
+                <caption>Guías de envío</caption>
+                <thead><tr>
+                    <th scope="col">Rastreo</th><th scope="col">Destinatario</th>
+                    <th scope="col">Dirección</th><th scope="col">Flete</th><th scope="col">Estado</th>
+                </tr></thead>
+                <tbody id="enviosBody"></tbody>
+            </table>
+        </div>
+        <p id="indicador" role="status" aria-live="polite"></p>
+        <nav id="paginador" aria-label="Paginación de envíos">
+            <button id="primera" type="button" disabled>&lt;&lt; Primera</button>
+            <button id="anterior" type="button" disabled>&lt; Anterior</button>
+            <button id="siguiente" type="button" disabled>Siguiente &gt;</button>
+            <button id="ultima" type="button" disabled>Última &gt;&gt;</button>
+        </nav>
+    </main>
+    <footer><p>&copy; 2026 ExpresoFast</p></footer>
+</body>
+</html>

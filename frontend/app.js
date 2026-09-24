@@ -118,6 +118,7 @@ async function registrarEnvio(evento) {
     evento.preventDefault();
     const payload = {
         codigoRastreo: document.getElementById('codigoRastreo').value,
+        destinatario: document.getElementById('destinatario').value,
         direccionDestino: document.getElementById('direccionDestino').value,
         pesoKg: parseFloat(document.getElementById('pesoKg').value),
         costo: parseFloat(document.getElementById('costo').value),

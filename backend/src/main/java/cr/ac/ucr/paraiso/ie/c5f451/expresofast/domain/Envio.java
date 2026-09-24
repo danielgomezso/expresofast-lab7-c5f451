@@ -6,6 +6,9 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "Envio")
+@NamedStoredProcedureQuery(name = "Envio.porEstado", procedureName = "SP_OBTENER_ENVIOS_POR_ESTADO",
+        resultClasses = Envio.class,
+        parameters = @StoredProcedureParameter(mode = ParameterMode.IN, name = "pEstado", type = String.class))
 public class Envio extends AuditableEntity {
 
     @Id
@@ -16,6 +19,18 @@ public class Envio extends AuditableEntity {
     @Column(name = "codigo_rastreo", nullable = false, unique = true, length = 30)
     @NotBlank
     private String codigoRastreo;
+
+    @Column(length = 100)
+    @Size(max = 100)
+    private String destinatario;
+
+    public String getDestinatario() {
+        return destinatario;
+    }
+
+    public void setDestinatario(String destinatario) {
+        this.destinatario = destinatario;
+    }
 
     @Column(name = "direccion_destino", nullable = false, length = 200)
     @NotBlank

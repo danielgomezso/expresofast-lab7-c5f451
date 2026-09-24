@@ -19,6 +19,7 @@
     </header>
 
     <nav>
+        <a href="dashboard_paginado.html">Consulta paginada</a>
         <button onclick="filtrarEnvios('TODOS')">Todos</button>
         <button onclick="filtrarEnvios('PENDIENTE')">Pendientes</button>
         <button onclick="filtrarEnvios('EN_TRANSITO')">En Tránsito</button>
@@ -48,6 +49,7 @@
                 <h2>Registrar Envío</h2>
                 <form id="formEnvio">
                     <input type="text" id="codigoRastreo" placeholder="Código de rastreo" required>
+                    <input type="text" id="destinatario" placeholder="Destinatario" maxlength="100" required>
                     <input type="text" id="direccionDestino" placeholder="Dirección" required>
                     <input type="number" id="pesoKg" placeholder="Peso (kg)" step="0.01" required>
                     <input type="number" id="costo" placeholder="Costo total" step="0.01" required>

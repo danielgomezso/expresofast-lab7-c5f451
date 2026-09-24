@@ -48,7 +48,7 @@
                     sessionStorage.setItem('jwt_token', data.token);
                     sessionStorage.setItem('roles', JSON.stringify(data.roles));
                     sessionStorage.setItem('username', data.username);
-                    window.location.href = 'dashboard.html';
+                    window.location.href = 'dashboard_paginado.html';
                 } else {
                     const problema = await respuesta.json();
                     errorBox.textContent = problema.detail || 'Credenciales inválidas';

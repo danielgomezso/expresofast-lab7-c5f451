@@ -236,3 +236,51 @@ footer {
         text-align: center;
     }
 }
+.consola-paginada {
+    max-width: 1200px;
+    margin: auto;
+    padding: 1rem;
+}
+
+.consola-paginada form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1 1 200px;
+    min-width: 0;
+}
+
+.consola-paginada input,
+.consola-paginada select {
+    padding: 0.6rem;
+    flex: none;
+    min-width: 0;
+}
+
+.tabla-contenedor {
+    overflow-x: auto;
+    background: white;
+}
+
+.tabla-envios {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-envios caption,
+.tabla-envios th,
+.tabla-envios td {
+    padding: 0.8rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.tabla-envios th {
+    background: var(--color-primario);
+    color: white;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

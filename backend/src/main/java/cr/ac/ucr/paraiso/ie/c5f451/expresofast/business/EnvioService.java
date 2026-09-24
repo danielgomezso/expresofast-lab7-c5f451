@@ -21,9 +21,51 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import cr.ac.ucr.paraiso.ie.c5f451.expresofast.exception.*;
 import java.util.List;
+import java.util.Locale;
+import cr.ac.ucr.paraiso.ie.c5f451.expresofast.dto.EnvioDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 @Service
 public class EnvioService {
+
+    @Transactional(readOnly = true)
+    public Page<EnvioDTO> listarPaginado(int page, int size, String sortBy, String dir,
+            String busqueda, String estado) {
+        if (page < 0 || size < 1 || size > 100) {
+            throw new IllegalArgumentException("La página debe ser mayor o igual a 0 y el tamaño entre 1 y 100.");
+        }
+        String campo = switch (sortBy) {
+            case "id", "codigoRastreo", "destinatario", "direccionDestino", "fechaCreacion" -> sortBy;
+            case "montoFlete" -> "costo";
+            case "estado" -> "estadoEnvio";
+            default -> throw new IllegalArgumentException("Campo de ordenamiento inválido.");
+        };
+        Sort orden = Sort.by(Sort.Direction.fromString(dir), campo).and(Sort.by("id"));
+        return envioRepository.buscarPaginado(busqueda.trim(), validarEstado(estado),
+                PageRequest.of(page, size, orden));
+    }
+
+    @Transactional(readOnly = true)
+    public List<EnvioDTO> listarViaStoredProcedure(String estado) {
+        String filtro = validarEstado(estado);
+        if (filtro.isEmpty()) {
+            throw new IllegalArgumentException("Debe seleccionar un estado.");
+        }
+        return envioRepository.obtenerPorEstado(filtro).stream()
+                .map(e -> new EnvioDTO(e.getId(), e.getCodigoRastreo(), e.getDestinatario(),
+                        e.getDireccionDestino(), e.getCosto(), e.getEstadoEnvio(), e.getFechaCreacion()))
+                .toList();
+    }
+
+    private String validarEstado(String estado) {
+        String valor = estado.trim().toUpperCase(Locale.ROOT);
+        if (!List.of("", "PENDIENTE", "EN_TRANSITO", "ENTREGADO", "CANCELADO").contains(valor)) {
+            throw new IllegalArgumentException("Estado de envío inválido.");
+        }
+        return valor;
+    }
 
     private final EnvioRepository envioRepository;
     private final VehiculoRepository vehiculoRepository;
