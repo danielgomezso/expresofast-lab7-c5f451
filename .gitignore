@@ -4,3 +4,7 @@
 **/target/
 *.log
 .github/modernize/
+**/node_modules/
+**/dist/
+**/.angular/
+**/coverage/
