@@ -1,0 +1,6 @@
+section { max-width: 680px; margin: auto; }
+article { margin-top: 28px; border-top: 1px solid #dce3ea; }
+dt { font-weight: bold; margin-top: 16px; }
+dd { margin: 6px 0; overflow-wrap: anywhere; }
+progress { width: 100%; height: 24px; accent-color: #167246; }
+.etapas { display: flex; justify-content: space-between; font-size: 0.85rem; }

@@ -1,0 +1,20 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Arial, sans-serif; background: #f2f5f8; color: #203446; }
+a { color: #185e95; }
+.panel { padding: 24px; background: white; border: 1px solid #dce3ea; border-radius: 8px; }
+h2 { margin-top: 0; }
+form { display: flex; flex-direction: column; gap: 10px; }
+label { font-weight: bold; margin-top: 8px; }
+input, textarea, select, button { font: inherit; padding: 10px; border: 1px solid #a7b7c6; border-radius: 4px; }
+input, textarea, select { max-width: 100%; background: white; color: #203446; }
+button { background: #185e95; color: white; cursor: pointer; }
+form button { margin-top: 12px; }
+button:disabled, select:disabled { opacity: 0.6; cursor: default; }
+:focus-visible { outline: 3px solid #dd8d05; outline-offset: 3px; }
+.error { color: #9f202a; background: #fde9eb; padding: 12px; }
+.exito { color: #155b39; background: #ddf5e8; padding: 12px; }
+.insignia { display: inline-block; padding: 6px 9px; border-radius: 12px; font-size: 0.8rem; white-space: nowrap; }
+.PENDIENTE { color: #6a4900; background: #fff0b3; }
+.EN_TRANSITO { color: #174783; background: #dfecff; }
+.ENTREGADO { color: #155b39; background: #ddf5e8; }
+.CANCELADO { color: #9f202a; background: #fde0e3; }

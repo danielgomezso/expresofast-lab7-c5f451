@@ -1,0 +1,29 @@
+<header>
+  <h1>ExpresoFast</h1>
+  <nav aria-label="Navegación principal">
+    <a routerLink="/envios" routerLinkActive="activo" ariaCurrentWhenActive="page">Envíos</a>
+    <a routerLink="/nuevo-envio" routerLinkActive="activo" ariaCurrentWhenActive="page">Nuevo envío</a>
+    <a routerLink="/rastreo" routerLinkActive="activo" ariaCurrentWhenActive="page">Rastrear guía</a>
+  </nav>
+  @if (auth.token()) {
+    <button type="button" (click)="auth.logout()">Cerrar sesión</button>
+  }
+</header>
+<main>
+  @if (auth.token()) {
+    <router-outlet />
+  } @else {
+    <section class="panel login">
+      <h2>Iniciar sesión</h2>
+      <p>Ingresa con tu usuario de ExpresoFast.</p>
+      <form #login="ngForm" (ngSubmit)="iniciarSesion()">
+        <label for="username">Usuario</label>
+        <input id="username" name="username" [(ngModel)]="username" required autocomplete="username">
+        <label for="password">Contraseña</label>
+        <input id="password" name="password" type="password" [(ngModel)]="password" required autocomplete="current-password">
+        <button [disabled]="login.invalid || cargando()">{{ cargando() ? 'Ingresando...' : 'Ingresar' }}</button>
+      </form>
+      @if (error()) { <p class="error" role="alert">{{ error() }}</p> }
+    </section>
+  }
+</main>

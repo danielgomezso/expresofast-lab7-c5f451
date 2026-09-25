@@ -1,0 +1,5 @@
+.titulo { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.tabla { overflow-x: auto; margin-top: 20px; }
+table { width: 100%; border-collapse: collapse; text-align: left; }
+th, td { padding: 14px 10px; border-bottom: 1px solid #dce3ea; }
+th { background: #eef3f7; }
