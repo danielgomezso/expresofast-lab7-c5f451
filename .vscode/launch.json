@@ -4,14 +4,14 @@
             "type": "java",
             "name": "ExpresofastApplication",
             "request": "launch",
-            "mainClass": "cr.ac.ucr.paraiso.ie.c5f451.expresofast.ExpresofastApplication"
+            "mainClass": "com.expresofast.ExpresofastApplication"
         },
         {
             "type": "java",
             "name": "Spring Boot-ExpresofastApplication<expresofast>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "mainClass": "cr.ac.ucr.paraiso.ie.c5f451.expresofast.ExpresofastApplication",
+            "mainClass": "com.expresofast.ExpresofastApplication",
             "projectName": "expresofast",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
