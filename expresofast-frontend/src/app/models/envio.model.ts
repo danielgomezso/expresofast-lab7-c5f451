@@ -15,3 +15,18 @@ export interface CrearEnvioPayload {
   direccionDestino: string;
   montoFlete: number | null;
 }
+
+export interface Paquete {
+  descripcion: string;
+  pesoKg: number;
+}
+
+export interface EnvioRegistroPayload {
+  numeroTracking: string;
+  destinatario: string;
+  direccionDestino: string;
+  montoFlete: number;
+  fechaDespacho: string;
+  fechaEntregaEstimada: string;
+  paquetes: Paquete[];
+}

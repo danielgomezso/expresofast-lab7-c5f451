@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { CrearEnvioPayload, Envio, EstadoEnvio } from '../models/envio.model';
+import { CrearEnvioPayload, Envio, EstadoEnvio, EnvioRegistroPayload } from '../models/envio.model';
 
 @Injectable({ providedIn: 'root' })
 export class EnvioService {
@@ -18,6 +18,14 @@ export class EnvioService {
 
   crearEnvio(payload: CrearEnvioPayload) {
     return this.http.post<Envio>(this.url, payload);
+  }
+
+  registrarEnvio(payload: EnvioRegistroPayload) {
+    return this.http.post<Envio>(`${this.url}/registro`, payload);
+  }
+
+  checkTracking(numeroTracking: string) {
+    return this.http.get<boolean>(`${this.url}/check-tracking/${encodeURIComponent(numeroTracking.trim())}`);
   }
 
   actualizarEstado(id: number, nuevoEstado: EstadoEnvio) {

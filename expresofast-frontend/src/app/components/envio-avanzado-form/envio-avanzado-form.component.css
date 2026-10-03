@@ -1,0 +1,33 @@
+section { max-width: 760px; margin: auto; padding: 32px; }
+h2 { margin-bottom: 10px; }
+.introduccion { color: #607184; line-height: 1.5; margin: 0 0 28px; }
+fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.contenido { display: flex; flex-direction: column; gap: 20px; }
+.titulo-seccion { font-size: 1rem; margin: 0; }
+.campo { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+label { margin: 0; font-size: 0.9rem; }
+input, textarea { width: 100%; border-radius: 6px; padding: 12px; }
+textarea { resize: vertical; min-height: 88px; }
+small { color: #607184; line-height: 1.5; }
+.fila { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.encabezado-paquetes { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid #e2e8f0; padding-top: 24px; }
+.contador { font-size: 0.8rem; color: #526b80; background: #edf3f8; padding: 6px 10px; border-radius: 16px; }
+.paquete { border: 1px solid #dce3ea; border-radius: 8px; background: #f8fafc; padding: 20px; }
+.paquete + .paquete { margin-top: 20px; }
+legend { padding: 0 8px; font-size: 0.9rem; font-weight: bold; }
+.fila-paquete { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+button { margin: 0; min-height: 42px; border-radius: 6px; font-weight: bold; }
+button:not(:disabled):hover { filter: brightness(0.95); }
+.eliminar { background: white; color: #9f202a; border-color: #e4bcc0; margin-top: 16px; font-size: 0.85rem; }
+.agregar { align-self: flex-start; background: #edf5fc; color: #185e95; border-color: #b9d1e5; }
+.acciones { display: flex; justify-content: flex-end; border-top: 1px solid #e2e8f0; padding-top: 20px; }
+.acciones button { min-width: 180px; }
+.error, .exito { margin: 0; border-radius: 6px; line-height: 1.5; }
+form + .error, form + .exito { margin-top: 20px; }
+input.ng-invalid.ng-touched, textarea.ng-invalid.ng-touched { border-color: #b91c1c; }
+@media (max-width: 600px) {
+  section { padding: 20px; }
+  .fila { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .paquete { padding: 16px; }
+  .agregar, .acciones button { width: 100%; }
+}

@@ -1,0 +1,91 @@
+<section class="panel">
+  <h2>Registrar envío con paquetes</h2>
+  <p class="introduccion">Completa los datos del envío y agrega los paquetes que deseas registrar.</p>
+  <form [formGroup]="formulario" (ngSubmit)="guardar()">
+    <fieldset class="contenido" [disabled]="guardando()">
+      <h3 class="titulo-seccion">Datos del envío</h3>
+      <div class="campo">
+      <label for="tracking">Número de rastreo</label>
+      <input id="tracking" formControlName="numeroTracking" maxlength="30" aria-describedby="ayuda-tracking">
+      <small id="ayuda-tracking">Usa letras, números y guiones, sin espacios. Máximo 30 caracteres.</small>
+      @if (formulario.controls.numeroTracking.pending) {
+        <p role="status">Verificando disponibilidad...</p>
+      }
+      @if (formulario.controls.numeroTracking.hasError('trackingTomado')) {
+        <p class="error" role="alert">Este número de rastreo ya está en uso</p>
+      }
+      @if (formulario.controls.numeroTracking.hasError('trackingNoVerificado')) {
+        <p class="error" role="alert">No se pudo verificar el rastreo. Comprueba la conexión y tu sesión.</p>
+        <button type="button" (click)="verificarTracking()">Reintentar verificación</button>
+      }
+      </div>
+      <div class="fila">
+      <div class="campo">
+      <label for="destinatario">Destinatario</label>
+      <input id="destinatario" formControlName="destinatario" maxlength="100">
+      </div>
+      <div class="campo">
+      <label for="flete">Monto del flete (colones)</label>
+      <input id="flete" type="number" formControlName="montoFlete" min="0.01" max="99999999.99" step="0.01">
+      </div>
+      </div>
+      <div class="campo">
+      <label for="direccion">Dirección de destino</label>
+      <textarea id="direccion" formControlName="direccionDestino" maxlength="200" rows="3"></textarea>
+      </div>
+      <div class="fila">
+      <div class="campo">
+      <label for="despacho">Fecha de despacho</label>
+      <input id="despacho" type="date" formControlName="fechaDespacho">
+      </div>
+      <div class="campo">
+      <label for="entrega">Fecha de entrega estimada</label>
+      <input id="entrega" type="date" formControlName="fechaEntregaEstimada">
+      </div>
+      </div>
+      @if (formulario.hasError('fechasInvalidas')) {
+        <p class="error" role="alert">La entrega estimada debe ser posterior al despacho.</p>
+      }
+      <div class="encabezado-paquetes">
+        <h3 class="titulo-seccion">Paquetes</h3>
+        <span class="contador">{{ paquetes.length }} en este envío</span>
+      </div>
+      <div formArrayName="paquetes">
+        @for (paquete of paquetes.controls; track paquete; let i = $index) {
+          <fieldset [formGroupName]="i" class="paquete">
+            <legend>Paquete {{ i + 1 }}</legend>
+            <div class="fila fila-paquete">
+            <div class="campo">
+            <label [for]="'descripcion-' + i">Descripción</label>
+            <input [id]="'descripcion-' + i" formControlName="descripcion" maxlength="255">
+            </div>
+            <div class="campo">
+            <label [for]="'peso-' + i">Peso (kg)</label>
+            <input [id]="'peso-' + i" type="number" formControlName="pesoKg" min="0.01" max="999.99" step="0.01">
+            </div>
+            </div>
+            @if (paquete.invalid && paquete.touched) {
+              <p class="error">Indica una descripción y un peso entre 0.01 y 999.99 kg, con máximo dos decimales.</p>
+            }
+            <button class="eliminar" type="button" (click)="eliminarPaquete(i)" [disabled]="paquetes.length === 1"
+              [attr.aria-label]="'Eliminar paquete ' + (i + 1)">Eliminar paquete</button>
+          </fieldset>
+        }
+      </div>
+      <button class="agregar" type="button" (click)="agregarPaquete()">+ Añadir Paquete</button>
+      @if (formulario.invalid && formulario.touched) {
+        <p class="error">Revisa los campos obligatorios. El flete debe ser positivo y tener máximo dos decimales.</p>
+      }
+      <div class="acciones">
+      <button type="submit" [disabled]="!formulario.valid || guardando()">
+        {{ guardando() ? 'Guardando...' : 'Registrar envío' }}
+      </button>
+      </div>
+    </fieldset>
+  </form>
+  @if (error()) { <p class="error" role="alert">{{ error() }}</p> }
+  @if (codigo()) {
+    <p class="exito" role="status">Envío registrado. Código: <strong>{{ codigo() }}</strong></p>
+    <a routerLink="/rastreo" [queryParams]="{ codigo: codigo() }">Rastrear esta guía</a>
+  }
+</section>
