@@ -3,6 +3,9 @@ package com.expresofast.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Envio")
@@ -60,6 +63,26 @@ public class Envio extends AuditableEntity {
     @JoinColumn(name = "conductor_id")
     @NotNull(groups = RegistroAnterior.class)
     private Conductor conductor;
+
+    @Column(name = "fecha_despacho")
+    private LocalDate fechaDespacho;
+
+    @Column(name = "fecha_entrega_estimada")
+    private LocalDate fechaEntregaEstimada;
+
+    @OneToMany(mappedBy = "envio", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Paquete> paquetes = new ArrayList<>();
+
+    public LocalDate getFechaDespacho() { return fechaDespacho; }
+    public void setFechaDespacho(LocalDate fechaDespacho) { this.fechaDespacho = fechaDespacho; }
+    public LocalDate getFechaEntregaEstimada() { return fechaEntregaEstimada; }
+    public void setFechaEntregaEstimada(LocalDate fechaEntregaEstimada) { this.fechaEntregaEstimada = fechaEntregaEstimada; }
+    public List<Paquete> getPaquetes() { return paquetes; }
+
+    public void agregarPaquete(Paquete paquete) {
+        paquetes.add(paquete);
+        paquete.setEnvio(this);
+    }
 
     public Integer getId() {
         return id;

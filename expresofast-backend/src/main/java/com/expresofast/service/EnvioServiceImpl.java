@@ -5,6 +5,9 @@ import com.expresofast.repository.VehiculoRepository;
 import com.expresofast.repository.BitacoraEnvioRepository;
 import com.expresofast.repository.UsuarioRepository;
 import com.expresofast.model.Envio;
+import com.expresofast.model.Paquete;
+import com.expresofast.dto.EnvioRegistroDTO;
+import java.math.BigDecimal;
 import com.expresofast.model.Vehiculo;
 import com.expresofast.model.BitacoraEnvio;
 import com.expresofast.model.Usuario;
@@ -32,6 +35,43 @@ import org.springframework.data.domain.Sort;
 
 @Service
 public class EnvioServiceImpl implements EnvioService {
+
+    @Transactional(readOnly = true)
+    public boolean existeTracking(String numeroTracking) {
+        return envioRepository.existsByCodigoRastreoIgnoreCase(numeroTracking.trim());
+    }
+
+    @Transactional
+    public EnvioDTO registrarEnvioAvanzado(EnvioRegistroDTO dto) {
+        if (!dto.fechaEntregaEstimada().isAfter(dto.fechaDespacho())) {
+            throw new IllegalArgumentException("La entrega estimada debe ser posterior al despacho.");
+        }
+        String tracking = dto.numeroTracking().trim().toUpperCase(Locale.ROOT);
+        if (existeTracking(tracking)) {
+            throw new DuplicateResourceException("Este número de rastreo ya está en uso");
+        }
+        Envio envio = new Envio();
+        envio.setCodigoRastreo(tracking);
+        envio.setDestinatario(dto.destinatario().trim());
+        envio.setDireccionDestino(dto.direccionDestino().trim());
+        envio.setCosto(dto.montoFlete());
+        envio.setEstadoEnvio("PENDIENTE");
+        envio.setFechaDespacho(dto.fechaDespacho());
+        envio.setFechaEntregaEstimada(dto.fechaEntregaEstimada());
+        BigDecimal pesoTotal = BigDecimal.ZERO;
+        for (var datos : dto.paquetes()) {
+            Paquete paquete = new Paquete();
+            paquete.setDescripcion(datos.descripcion().trim());
+            paquete.setPesoKg(datos.pesoKg());
+            envio.agregarPaquete(paquete);
+            pesoTotal = pesoTotal.add(datos.pesoKg());
+        }
+        if (pesoTotal.compareTo(new BigDecimal("99999999.99")) > 0) {
+            throw new IllegalArgumentException("El peso total supera el máximo permitido.");
+        }
+        envio.setPesoKg(pesoTotal);
+        return toEnvioDTO(envioRepository.saveAndFlush(envio));
+    }
 
     @Transactional(readOnly = true)
     public List<EnvioDTO> obtenerEnvios() {

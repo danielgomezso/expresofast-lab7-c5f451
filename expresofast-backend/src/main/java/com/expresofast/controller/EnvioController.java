@@ -7,6 +7,7 @@ import com.expresofast.dto.CambioEstadoDTO;
 import com.expresofast.dto.EnvioResponseDTO;
 import jakarta.validation.Valid;
 import com.expresofast.dto.CrearEnvioDTO;
+import com.expresofast.dto.EnvioRegistroDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
@@ -25,6 +26,17 @@ public class EnvioController {
 
     public EnvioController(EnvioService envioService) {
         this.envioService = envioService;
+    }
+
+    @GetMapping({"/envios/check-tracking/{trackingNumber}", "/v1/envios/check-tracking/{trackingNumber}"})
+    public boolean existeTracking(@PathVariable String trackingNumber) {
+        return envioService.existeTracking(trackingNumber);
+    }
+
+    @PostMapping("/v1/envios/registro")
+    @ResponseStatus(HttpStatus.CREATED)
+    public EnvioDTO registrarEnvioAvanzado(@Valid @RequestBody EnvioRegistroDTO dto) {
+        return envioService.registrarEnvioAvanzado(dto);
     }
 
     @GetMapping("/v1/envios")

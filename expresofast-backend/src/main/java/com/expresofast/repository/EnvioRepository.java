@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.query.Procedure;
 
 public interface EnvioRepository extends JpaRepository<Envio, Integer> {
+    boolean existsByCodigoRastreoIgnoreCase(String codigoRastreo);
+
     java.util.Optional<Envio> findByCodigoRastreo(String codigoRastreo);
 
     List<Envio> findByEstadoEnvio(String estado);

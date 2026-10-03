@@ -29,6 +29,12 @@ public class GlobalExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
+    @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
+    public ProblemDetail integrity(org.springframework.dao.DataIntegrityViolationException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT,
+                "No se pudo guardar el envío. Verifica que el rastreo no esté repetido y que los datos sean válidos.");
+    }
+
     @ExceptionHandler(DuplicateResourceException.class)
     public ProblemDetail duplicate(DuplicateResourceException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());

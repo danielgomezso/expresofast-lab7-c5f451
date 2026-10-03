@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface EnvioService {
+    boolean existeTracking(String numeroTracking);
+    EnvioDTO registrarEnvioAvanzado(EnvioRegistroDTO dto);
     List<EnvioDTO> obtenerEnvios();
     EnvioDTO obtenerPorRastreo(String codigo);
     EnvioDTO crearEnvio(CrearEnvioDTO dto);
